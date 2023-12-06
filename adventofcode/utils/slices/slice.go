@@ -1,11 +1,25 @@
 package slices
 
 import (
+	"strconv"
+
 	"github.com/CarlCao17/LeetCode/adventofcode/utils/constraints"
 )
 
+func NewSliceWith[T any](val T, n int) []T {
+	slice := make([]T, n)
+	for i := 0; i < n; i++ {
+		slice[i] = val
+	}
+	return slice
+}
+
 func Sum[T constraints.RealNumber](s []T) T {
 	return Reduce(s, RFSum[T])
+}
+
+func Multi[T constraints.RealNumber](s []T) T {
+	return ReduceWithAcc(s, 1, RFMulti[T])
 }
 
 func Max[T constraints.RealNumber](s []T) T {
@@ -50,6 +64,10 @@ func RFSum[T constraints.RealNumber](acc T, item T) T {
 	return acc + item
 }
 
+func RFMulti[T constraints.RealNumber](acc T, item T) T {
+	return acc * item
+}
+
 func RFMax[T constraints.RealNumber](acc T, item T) T {
 	if item > acc {
 		return item
@@ -70,4 +88,14 @@ func Map[T any, V any](s []T, mapFunc func(T) V) []V {
 		res[i] = mapFunc(ss)
 	}
 	return res
+}
+
+func StrToInt64(s string) int64 {
+	i, _ := strconv.ParseInt(s, 10, 64)
+	return i
+}
+
+func StrToInt(s string) int {
+	i, _ := strconv.ParseInt(s, 10, strconv.IntSize)
+	return int(i)
 }
