@@ -1,0 +1,100 @@
+package ch2
+
+import (
+	"reflect"
+	"testing"
+)
+
+func FromArray(a []int) *ListNode {
+	if len(a) == 0 {
+		return nil
+	}
+	d := &ListNode{}
+	prev := d
+	for _, aa := range a {
+		n := &ListNode{Val: aa}
+		prev.Next = n
+		prev = prev.Next
+	}
+	return d.Next
+}
+
+func (l *ListNode) ToArray() []int {
+	if l == nil {
+		return []int{}
+	}
+	res := make([]int, 0, 8)
+	for p := l; p != nil; p = p.Next {
+		res = append(res, p.Val)
+	}
+	return res
+}
+
+func TestListNodeHelper(t *testing.T) {
+	want := []int{1, 2, 3, 4, 5, 6, 7}
+	list := FromArray(want)
+	got := list.ToArray()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got = %v, want = %v\n", got, want)
+	}
+	want = []int{}
+	list = FromArray(want)
+	got = list.ToArray()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got = %v, want = %v\n", got, want)
+	}
+
+	want = []int{1, 2}
+	list = FromArray(want)
+	got = list.ToArray()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got = %v, want = %v\n", got, want)
+	}
+}
+
+func TestReversePrint(t *testing.T) {
+	type args struct {
+		p *ListNode
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "empty list",
+			args: args{
+				p: nil,
+			},
+			want: []int{},
+		},
+		{
+			name: "len=1",
+			args: args{
+				p: FromArray([]int{1}),
+			},
+			want: []int{1},
+		},
+		{
+			name: "len=2",
+			args: args{
+				p: FromArray([]int{1, 2}),
+			},
+			want: []int{2, 1},
+		},
+		{
+			name: "normal case",
+			args: args{
+				p: FromArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}),
+			},
+			want: []int{0, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ReversePrint(tt.args.p); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ReversePrint() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
