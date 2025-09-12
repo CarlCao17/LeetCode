@@ -32,6 +32,7 @@ func (n *ListNode) String() string {
 		if n.Next != nil {
 			b.WriteRune(',')
 		}
+
 		n = n.Next
 	}
 	b.WriteRune(']')

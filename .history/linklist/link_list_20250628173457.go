@@ -29,9 +29,7 @@ func (n *ListNode) String() string {
 	b.WriteRune('[')
 	for n != nil {
 		b.WriteString(strconv.Itoa(n.Val))
-		if n.Next != nil {
-			b.WriteRune(',')
-		}
+		b.WriteRune(' ')
 		n = n.Next
 	}
 	b.WriteRune(']')
